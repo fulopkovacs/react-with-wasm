@@ -1,6 +1,7 @@
 {
   "name": "wasm-module",
   "scripts": {
+    "install-subpackage-deps": "cargo install wasm-pack",
     "build": "wasm-pack build --target web --out-dir ../hello-wasm"
   }
 }

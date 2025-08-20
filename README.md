@@ -20,7 +20,6 @@ packages:
 ```sh
 cd packages/wasm-module
 cargo install wasm-pack
-cargo install
 ```
 
 ### Build the WASM module
@@ -33,4 +32,10 @@ pnpm run build:wasm
 
 ```sh
 pnpm i
+```
+
+### Run the React app
+
+```sh
+pnpm dev
 ```
