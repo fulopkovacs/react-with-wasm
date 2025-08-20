@@ -1,5 +1,5 @@
 {
-  "name": "react-app-with-wasm",
+  "name": "react-with-wasm",
   "private": true,
   "version": "1.0.0",
   "workspaces": [
