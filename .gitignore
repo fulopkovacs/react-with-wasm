@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Rust build and dependency files
+hello-wasm/target/debug
+# packages/wasm-module/target/debug/*
+packages/wasm-module/target
+**/*.rs.bk
+# Cargo.lock
+# Cargo.toml
+
+# Misc
+*.log
+

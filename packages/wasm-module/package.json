@@ -1,0 +1,6 @@
+{
+  "name": "wasm-module",
+  "scripts": {
+    "build": "wasm-pack build --target web --out-dir ../hello-wasm"
+  }
+}
