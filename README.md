@@ -20,6 +20,7 @@ packages:
 ```sh
 cd packages/wasm-module
 cargo install wasm-pack
+cd ../..
 ```
 
 ### Build the WASM module
@@ -38,4 +39,12 @@ pnpm i
 
 ```sh
 pnpm dev
+```
+
+## Development
+
+You need to recompile the `wasm` module every time you change the Rust source:
+
+```sh
+pnpm build:wasm
 ```
