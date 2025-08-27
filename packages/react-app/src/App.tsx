@@ -57,21 +57,26 @@ function App() {
 	const jsGrayscaleCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
 	const canvasSize = {
-		// width: 20000,
-		// height: 20000,
-		width: 3000,
-		height: 3000,
+		width: 10000,
+		height: 10000,
+		// width: 3000,
+		// height: 3000,
 		// width: 600,
 		// height: 600,
 	};
 
+	console.dir({ canvasSize });
+
 	const [imageData, setImageData] = useState<ImageData | null>(null);
 
+	const [memory, setMemory] = useState<WebAssembly.Memory | null>(null);
+
 	useEffect(() => {
-		init().then(() => {
+		init().then((v) => {
 			drawGradient(canvasRef);
 			setWebAssemblyReady(true);
 			setImageData(getImageData(canvasRef));
+			setMemory(v.memory);
 		});
 	}, []);
 
@@ -96,7 +101,15 @@ function App() {
 						const imageDataArray = new Uint8Array(imageData.data);
 						console.log("start wasm conversion");
 						console.time("wasm conversion");
-						const grayscaleData = convert_to_grayscale(imageDataArray);
+						const pointer = convert_to_grayscale(imageDataArray);
+						if (!memory) {
+							throw new Error("Memory not initialized");
+						}
+						const grayscaleData = new Uint8Array(
+							memory.buffer,
+							pointer,
+							imageDataArray.length,
+						);
 						console.timeEnd("wasm conversion");
 						const grayscaleImageData = new ImageData(
 							new Uint8ClampedArray(grayscaleData),
