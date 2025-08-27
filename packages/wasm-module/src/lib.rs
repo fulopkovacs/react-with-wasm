@@ -16,7 +16,7 @@ pub fn get_arr_length(arr: &[f32]) -> usize {
 }
 
 #[wasm_bindgen]
-pub fn convert_to_grayscale(image_data: &[u8]) -> Vec<u8> {
+pub fn convert_to_grayscale(image_data: &[u8]) -> *const u8 {
     let mut grayscale_data = Vec::with_capacity(image_data.len() / 4);
     for chunk in image_data.chunks(4) {
         let r = chunk[0] as f32;
@@ -29,7 +29,8 @@ pub fn convert_to_grayscale(image_data: &[u8]) -> Vec<u8> {
         grayscale_data.push(gray); // b
         grayscale_data.push(a);
     }
-    grayscale_data
+
+    &grayscale_data[0] as *const u8
 }
 
 // #[wasm_bindgen]
