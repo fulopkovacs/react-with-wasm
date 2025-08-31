@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import init, { greet, get_arr_length, convert_to_grayscale } from "hello-wasm";
+import init, {
+	greet,
+	get_arr_length,
+	convert_to_grayscale,
+	// allocate_memory,
+	alloc,
+	dealloc,
+} from "hello-wasm";
 
 function drawGradient(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
 	const canvas = canvasRef.current;
@@ -57,6 +64,8 @@ function App() {
 	const jsGrayscaleCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
 	const canvasSize = {
+		// width: 20000,
+		// height: 20000,
 		width: 10000,
 		height: 10000,
 		// width: 3000,
@@ -99,12 +108,24 @@ function App() {
 					},
 					async () => {
 						const imageDataArray = new Uint8Array(imageData.data);
-						console.log("start wasm conversion");
-						console.time("wasm conversion");
-						const pointer = convert_to_grayscale(imageDataArray);
+						const imageDataArrayPointer = alloc(imageDataArray.length);
 						if (!memory) {
 							throw new Error("Memory not initialized");
 						}
+						var wasmMem = new Uint8Array(
+							memory.buffer,
+							imageDataArrayPointer,
+							imageDataArray.length,
+						);
+						wasmMem.set(imageDataArray); // jsDataArray: your JS Uint8Array
+
+						console.log("start wasm conversion");
+						console.time("wasm conversion");
+						const pointer = convert_to_grayscale(
+							imageDataArrayPointer,
+							imageDataArray.length,
+						);
+						dealloc(imageDataArrayPointer, imageDataArray.length);
 						const grayscaleData = new Uint8Array(
 							memory.buffer,
 							pointer,
@@ -126,7 +147,7 @@ function App() {
 				].map((fn) => fn()),
 			).then(() => console.log("hi"));
 		}
-	}, [webassemblyReady, imageData]);
+	}, [webassemblyReady, imageData, memory]);
 
 	return (
 		<>
